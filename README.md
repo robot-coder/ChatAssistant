@@ -1,9 +1,9 @@
 # Chat Assistant Documentation
 
 ## Overview
-This project is a Chat Assistant built using FastAPI for the backend and a JavaScript frontend. It allows users to interact with a selected LLM in a continuous conversation format.
+This Chat Assistant is a simple implementation of a conversational AI using FastAPI for the backend and a JavaScript frontend. The assistant allows users to interact with different language models and maintain a continuous conversation.
 
-## Setup Instructions
+## Installation Instructions
 1. Clone the repository:
    ```bash
    git clone https://github.com/robot-coder/ChatAssistant.git
@@ -11,24 +11,29 @@ This project is a Chat Assistant built using FastAPI for the backend and a JavaS
    ```
 2. Install the required dependencies:
    ```bash
-   pip install fastapi uvicorn
+   pip install -r requirements.txt
    ```
-3. Run the FastAPI server:
+
+## Usage
+1. Start the FastAPI server:
    ```bash
-   uvicorn app.main:app --reload
+   uvicorn main:app --reload
    ```
-4. Open your browser and navigate to `http://localhost:8000` to access the Chat Assistant.
-
-## Deployment
-The Chat Assistant will be deployed on Render.com. Link to the deployed site will be added here once available.
-
-## API Key
-A new OpenRouter.ai API Key will be created for public availability with a spending limit.
+2. Open `index.html` in your browser to access the Chat Assistant.
+3. Interact with the assistant by typing your messages and selecting the desired language model.
 
 ## Features
-- Continuous conversation with LLM
-- LLM selection
+- Continuous conversation
+- User selection of language models
+- Basic styling and user interface
+
+## Deployment
+This Chat Assistant can be deployed on Render.com. Follow their documentation for deployment instructions.
 
 ## Extensions
-- Text and image file uploads (to be implemented)
-- Side-by-side LLM response comparison (to be implemented)
+- Text file uploads to add to the prompt context.
+- Image file uploads for multimodal LLMs.
+- Side-by-side LLM response comparison.
+
+## License
+This project is licensed under the MIT License.
