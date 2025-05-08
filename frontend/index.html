@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Assistant</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+        #user-input { width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Chat Assistant</h1>
+    <div id="chat"></div>
+    <input type="text" id="user-input" placeholder="Type your message..." />
+    <button id="send">Send</button>
+    <script>
+        $(document).ready(function() {
+            let messages = [];
+            $('#send').click(function() {
+                const userInput = $('#user-input').val();
+                messages.push({ role: 'user', content: userInput });
+                $('#chat').append('<div>User: ' + userInput + '</div>');
+                $('#user-input').val('');
+                $.post('/api/chat', { messages: messages }, function(data) {
+                    messages.push({ role: 'assistant', content: data.response });
+                    $('#chat').append('<div>Assistant: ' + data.response + '</div>');
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
