@@ -11,16 +11,26 @@
     <div id="chat"></div>
     <input type="text" id="user-input" placeholder="Type your message..." />
     <button id="send">Send</button>
+    <select id="llm-select">
+        <option value="llm1">LLM 1</option>
+        <option value="llm2">LLM 2</option>
+    </select>
 
     <script>
+        const socket = new WebSocket('ws://localhost:8000/chat');
+        socket.onmessage = function(event) {
+            const messages = JSON.parse(event.data);
+            $('#chat').empty();
+            messages.forEach(msg => {
+                $('#chat').append('<div>' + msg + '</div>');
+            });
+        };
+
         $("#send").click(function() {
             const userInput = $("#user-input").val();
-            // Send user input to the server
-            $.post('/chat', { message: userInput }, function(response) {
-                // Display response in chat
-                $('#chat').append('<div>User: ' + userInput + '</div>');
-                $('#chat').append('<div>Assistant: ' + response + '</div>');
-            });
+            const selectedLLM = $("#llm-select").val();
+            socket.send(JSON.stringify({ message: userInput, llm: selectedLLM }));
+            $("#user-input").val('');
         });
     </script>
 </body>
