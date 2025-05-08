@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Assistant</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+        .message { margin: 5px 0; }
+        .user { font-weight: bold; color: blue; }
+        .assistant { font-weight: bold; color: green; }
+    </style>
+</head>
+<body>
+    <h1>Chat Assistant</h1>
+    <div id="chat"></div>
+    <input type="text" id="userInput" placeholder="Type your message..." />
+    <button id="sendButton">Send</button>
+    <script>
+        const chatDiv = document.getElementById('chat');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        let messages = [];
+
+        sendButton.addEventListener('click', () => {
+            const userMessage = userInput.value;
+            if (userMessage) {
+                messages.push({ role: 'user', content: userMessage });
+                updateChat();
+                userInput.value = '';
+                fetchResponse(userMessage);
+            }
+        });
+
+        function updateChat() {
+            chatDiv.innerHTML = '';
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message ' + msg.role;
+                messageDiv.innerText = `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`;
+                chatDiv.appendChild(messageDiv);
+            });
+        }
+
+        async function fetchResponse(userMessage) {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            });
+            const data = await response.json();
+            messages.push({ role: 'assistant', content: data.response });
+            updateChat();
+        }
+    </script>
+</body>
+</html>
