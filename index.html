@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Assistant</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+        #input { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Chat Assistant</h1>
+    <div id="chat"></div>
+    <div id="input">
+        <select id="llm-select">
+            <option value="model1">Model 1</option>
+            <option value="model2">Model 2</option>
+        </select>
+        <input type="text" id="user-input" placeholder="Type your message..." />
+        <button id="send-btn">Send</button>
+    </div>
+    <script>
+        let messages = [];
+
+        $('#send-btn').click(function() {
+            const userInput = $('#user-input').val();
+            const selectedLLM = $('#llm-select').val();
+            messages.push({ role: 'user', content: userInput });
+            $('#chat').append('<div>User: ' + userInput + '</div>');
+            $('#user-input').val('');
+
+            $.post('/api/chat', { messages: messages, llm: selectedLLM }, function(data) {
+                messages.push({ role: 'assistant', content: data.response });
+                $('#chat').append('<div>Assistant: ' + data.response + '</div>');
+                $('#chat').scrollTop($('#chat')[0].scrollHeight);
+            });
+        });
+    </script>
+</body>
+</html>
